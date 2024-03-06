@@ -28,6 +28,27 @@ function getStatusRejected(): string {
   </document>`;
 }
 
+function getSwift(): string {
+  return `
+  {1:F01KURAPAPAAXXX0000739856}{2:I998RTGSXXXXXXXXN}{3:{108:2402220000739856}}{4:
+    :20:0000126137
+    :12:557
+    :77E:
+    :21:XXXXXXXXXXXXXXXX
+    :11S:000
+    240222
+    :16R:RSN
+    :M01:INVFMT
+    :M02:The message could not be processed because its format is unsupported
+    :16S:RSN
+    -}
+  `
+}
+
+function getNoColas(): string {
+  return `No existen colas en el ATS `
+}
+
 export class BNPRouter {
     router: Router;
 
@@ -60,7 +81,15 @@ export class BNPRouter {
      */
     public getCommand(req: Request, res: Response, _next: NextFunction) {
         console.log("GET Request: /api/message");
-        res.status(202).send("No hay mensajes en la cola de salida");
+        res.set('Content-Type', 'text/plain');
+        if( req.get('status-response') === 'ACCEPTED' ) {
+          res.status(202).send(getSwift());
+      } else if(req.get('status-response') === 'REJECTED') {
+          res.status(202).send(getNoColas());
+      } else {
+          const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
+          res.status(statusNumber).send("ERROR");
+      }
     }
 
     public getHealthCheck(req: Request, res: Response, _next: NextFunction) {
