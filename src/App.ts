@@ -19,7 +19,7 @@ class App {
     }
     // Configure API endpoints.
     private mountRoutes(): void {
-        this.express.use('/api', bnpRouter);
+        this.express.use('/riel', bnpRouter);
     }
 
     private enableCors() {

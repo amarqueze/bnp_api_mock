@@ -66,7 +66,8 @@ export class BNPRouter {
     public postCommand(req: Request, res: Response, _next: NextFunction) {
         console.log("POST Request: /api/message");
         res.set('Content-Type', 'text/xml');
-        if( req.get('status-response') === 'ACCEPTED' ) {
+        const sendPost = () => {
+          if( req.get('status-response') === 'ACCEPTED' ) {
             res.status(202).send(getStatusAccepted());
         } else if(req.get('status-response') === 'REJECTED') {
             res.status(400).send(getStatusRejected());
@@ -74,6 +75,9 @@ export class BNPRouter {
             const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
             res.status(statusNumber).send("ERROR");
         }
+        }
+
+        setTimeout(sendPost, 180000)
     }
 
     /**
@@ -82,14 +86,18 @@ export class BNPRouter {
     public getCommand(req: Request, res: Response, _next: NextFunction) {
         console.log("GET Request: /api/message");
         res.set('Content-Type', 'text/plain');
-        if( req.get('status-response') === 'ACCEPTED' ) {
-          res.status(202).send(getSwift());
-      } else if(req.get('status-response') === 'REJECTED') {
-          res.status(202).send(getNoColas());
-      } else {
-          const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
-          res.status(statusNumber).send("ERROR");
-      }
+        const sendResponse = () => {
+          if (req.get('status-response') === 'ACCEPTED') {
+              res.status(202).send(getSwift());
+          } else if (req.get('status-response') === 'REJECTED') {
+              res.status(202).send(getNoColas());
+          } else {
+              const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
+              res.status(statusNumber).send("ERROR");
+          }
+      };
+
+      setTimeout(sendResponse, 180000);
     }
 
     public getHealthCheck(req: Request, res: Response, _next: NextFunction) {
@@ -102,8 +110,8 @@ export class BNPRouter {
      * endpoints.
      */
     init() {
-        this.router.post('/message', this.postCommand);
-        this.router.get('/message', this.getCommand);
+        this.router.post('/riel/api/participants/Message', this.postCommand);
+        this.router.get('/riel/api/participants/Message', this.getCommand);
         this.router.get('/health-check', this.getHealthCheck);
         
     }
