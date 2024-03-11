@@ -110,8 +110,8 @@ export class BNPRouter {
      * endpoints.
      */
     init() {
-        this.router.post('/riel/api/participants/Message', this.postCommand);
-        this.router.get('/riel/api/participants/Message', this.getCommand);
+        this.router.post('/api/participants/Message', this.postCommand);
+        this.router.get('/api/participants/Message', this.getCommand);
         this.router.get('/health-check', this.getHealthCheck);
         
     }
