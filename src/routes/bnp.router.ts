@@ -65,7 +65,7 @@ export class BNPRouter {
      */
     public postCommand(req: Request, res: Response, _next: NextFunction) {
         console.log("POST Request: /api/message");
-        res.set('Content-Type', 'text/xml');
+        res.set('Content-Type', 'text/plain');
         const sendPost = () => {
           if( req.get('status-response') === 'ACCEPTED' ) {
             res.status(202).send(getStatusAccepted());
@@ -77,7 +77,7 @@ export class BNPRouter {
         }
         }
 
-        setTimeout(sendPost, 180000)
+        setTimeout(sendPost, 0)
     }
 
     /**
@@ -97,7 +97,7 @@ export class BNPRouter {
           }
       };
 
-      setTimeout(sendResponse, 180000);
+      setTimeout(sendResponse, 0);
     }
 
     public getHealthCheck(req: Request, res: Response, _next: NextFunction) {
