@@ -49,6 +49,10 @@ function getNoColas(): string {
   return `No existen colas en el ATS `
 }
 
+function proccessOk(): string {
+  return `processed OK`
+}
+
 export class BNPRouter {
     router: Router;
 
@@ -91,6 +95,8 @@ export class BNPRouter {
               res.status(202).send(getSwift());
           } else if (req.get('status-response') === 'REJECTED') {
               res.status(202).send(getNoColas());
+          } else if(req.get('status-response') === '2'){
+              res.status(202).send(proccessOk());
           } else {
               const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
               res.status(statusNumber).send("ERROR");
