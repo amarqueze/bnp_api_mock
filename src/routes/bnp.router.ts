@@ -2,30 +2,30 @@ import {Router, Request, Response, NextFunction} from 'express';
  
 
 function getStatusAccepted(): string {
-    return `<document>
+    return `<Document>
     <header>
       <sender>KRA</sender>
       <message_type>103</message_type>
     </header>
     <responseDetails>
       <OrgMsgId>referencial</OrgMsgId>
-      <respStatus>ACCEPTED</respStatus>
+      <RespStatus>ACCEPTED</RespStatus>
     </responseDetails>
-  </document>`;
+  </Document>`;
 }
 
 function getStatusRejected(): string {
-    return `<document>
+    return `<Document>
     <header>
       <sender>KRA</sender>
       <message_type>103</message_type>
     </header>
     <responseDetails>
       <OrgMsgId>referencial</OrgMsgId>
-      <respStatus>REJECTED</respStatus>
-      <respReason>Validar Credenciales para conexión con las colas del participante</respReason>
+      <RespStatus>REJECTED</RespStatus>
+      <RespReason>Validar Credenciales para conexión con las colas del participante</RespReason>
     </responseDetails>
-  </document>`;
+  </Document>`;
 }
 
 function getSwift(): string {
@@ -70,7 +70,7 @@ export class BNPRouter {
           if( req.get('status-response') === 'ACCEPTED' ) {
             res.status(202).send(getStatusAccepted());
         } else if(req.get('status-response') === 'REJECTED') {
-            res.status(400).send(getStatusRejected());
+            res.status(202).send(getStatusRejected());
         } else {
             const statusNumber = !isNaN(req.get('status-response')) ? Number(req.get('status-response')) : 500;
             res.status(statusNumber).send("ERROR");
